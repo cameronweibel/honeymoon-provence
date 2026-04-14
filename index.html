@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provence Honeymoon — May 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold-dark: #6B4E8B;
+    --gold-mid: #7E5FA0;
+    --gold-light: #A88BC7;
+    --gold-faint: rgba(107,78,139,0.08);
+    --heading: #2E1F3E;
+    --body: #5A4D6B;
+    --muted: #9488A0;
+    --bg: #FFFFFF;
+    --bg-alt: #FAF8FC;
+    --border: rgba(0,0,0,0.06);
+    --radius: 14px;
+  }
+
+  body {
+    font-family: 'Questrial', system-ui, -apple-system, sans-serif;
+    background: var(--bg); color: var(--body);
+    overflow: hidden; height: 100vh; width: 100vw;
+  }
+
+  .deck { position: relative; width: 100vw; height: 100vh; }
+  .slide {
+    position: absolute; inset: 0; display: none;
+    flex-direction: column; justify-content: center; align-items: center;
+    padding: 3.5rem 5rem; text-align: center; background: var(--bg);
+    overflow-y: auto;
+  }
+  .slide.active { display: flex; }
+  .slide.bg-alt { background: var(--bg-alt); }
+
+  h1 { font-size: 3.2rem; font-weight: 700; line-height: 1.15; color: var(--gold-dark); letter-spacing: -0.03em; margin-bottom: 1rem; }
+  h2 { font-size: 2.2rem; font-weight: 700; line-height: 1.2; color: var(--gold-dark); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+  h3 { font-size: 1.1rem; font-weight: 400; color: var(--body); line-height: 1.6; margin-bottom: 1.5rem; max-width: 700px; }
+  p { font-size: 1.05rem; line-height: 1.65; }
+  strong { color: var(--heading); }
+  a { color: var(--gold-mid); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .tag { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.9rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1.25rem; background: var(--gold-faint); color: var(--gold-dark); }
+  .tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold-light); }
+
+  /* Hero image slide */
+  .hero-img { width: 100%; max-width: 900px; height: 340px; object-fit: cover; border-radius: var(--radius); margin-bottom: 1.5rem; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; max-width: 860px; margin-top: 1.25rem; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem 1.25rem; text-align: left; }
+  .stat-box .num { font-size: 2rem; font-weight: 700; color: var(--gold-dark); letter-spacing: -0.03em; }
+  .stat-box .desc { font-size: 0.85rem; color: var(--body); margin-top: 0.25rem; line-height: 1.5; }
+
+  .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; max-width: 880px; margin-top: 1rem; }
+  .photo-card { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); position: relative; }
+  .photo-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+  .photo-card .caption { padding: 0.9rem 1.1rem; }
+  .photo-card .caption h4 { font-size: 0.95rem; font-weight: 700; color: var(--heading); margin-bottom: 0.15rem; }
+  .photo-card .caption p { font-size: 0.8rem; color: var(--body); line-height: 1.45; }
+  .photo-card .badge-overlay { position: absolute; top: 0.6rem; right: 0.6rem; background: var(--gold-dark); color: #fff; padding: 0.2rem 0.55rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; }
+
+  .day-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 940px; margin-top: 0.75rem; }
+  .day-grid.two { grid-template-columns: repeat(2, 1fr); }
+  .day-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; text-align: left; position: relative; overflow: hidden; }
+  .day-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(to right, var(--gold-dark), var(--gold-light)); }
+  .day-card .day-label { font-size: 0.65rem; font-weight: 700; color: var(--gold-mid); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem; }
+  .day-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--heading); margin-bottom: 0.35rem; max-width: none; }
+  .day-card p { font-size: 0.82rem; line-height: 1.5; }
+  .day-card .drive { font-size: 0.7rem; color: var(--muted); margin-top: 0.35rem; }
+
+  .dinner-table { max-width: 880px; width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 1rem; border-radius: var(--radius); overflow: hidden; font-size: 0.85rem; }
+  .dinner-table th { background: var(--gold-dark); color: #fff; padding: 0.65rem 1rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; text-align: left; font-weight: 700; }
+  .dinner-table td { padding: 0.55rem 1rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: middle; }
+  .dinner-table tr:last-child td { border-bottom: none; }
+  .dinner-table tr:nth-child(even) { background: var(--bg-alt); }
+  .badge { display: inline-block; padding: 0.15rem 0.45rem; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; background: var(--gold-dark); color: #fff; }
+  .badge-rec { background: var(--gold-light); color: var(--heading); }
+
+  .link-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; text-align: left; }
+  .link-card .link-label { font-size: 0.65rem; font-weight: 700; color: var(--gold-mid); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .link-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--heading); margin-bottom: 0.2rem; max-width: none; }
+  .link-card p { font-size: 0.82rem; }
+  .link-card a { color: var(--gold-dark); font-size: 0.82rem; }
+
+  .progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(to right, var(--gold-dark), var(--gold-light)); transition: width 0.3s ease; z-index: 100; }
+  .nav { position: fixed; bottom: 1.5rem; right: 1.5rem; display: flex; align-items: center; gap: 0.6rem; z-index: 100; }
+  .nav button { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--body); font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .nav button:hover { background: var(--gold-dark); color: #fff; border-color: var(--gold-dark); }
+  .nav button:disabled { opacity: 0.2; cursor: not-allowed; }
+  .nav .counter { font-size: 0.75rem; color: var(--muted); font-weight: 700; }
+
+  @media print { .nav, .progress { display: none !important; } }
+  @media (max-width: 900px) {
+    .slide { padding: 2rem; }
+    h1 { font-size: 2rem; } h2 { font-size: 1.5rem; }
+    .stat-grid, .day-grid, .day-grid.two, .photo-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="deck">
+
+<!-- SLIDE 1: Title -->
+<div class="slide active">
+  <span class="tag"><span class="tag-dot"></span> Honeymoon 2026</span>
+  <h1>Provence</h1>
+  <h3>Bonnieux &amp; the Luberon, South of France<br>May 14 &ndash; 22 &nbsp;&middot;&nbsp; 8 Nights</h3>
+  <img class="hero-img" src="img/luberon-landscape.jpg" alt="Luberon lavender fields and hilltop village">
+  <div class="stat-grid">
+    <div class="stat-box"><div class="num">8</div><div class="desc">Nights at a designer villa with heated pool</div></div>
+    <div class="stat-box"><div class="num">2</div><div class="desc">Michelin-starred dinners</div></div>
+    <div class="stat-box"><div class="num">2</div><div class="desc">UNESCO World Heritage sites</div></div>
+  </div>
+</div>
+
+<!-- SLIDE 2: The Stay -->
+<div class="slide">
+  <span class="tag"><span class="tag-dot"></span> The Stay</span>
+  <h1>Design Villa in the Luberon</h1>
+  <h3>Architect-renovated mas or modern villa near Bonnieux. Heated pool, vineyard views, curated interiors.</h3>
+  <div class="photo-card" style="max-width:880px;margin-top:1rem;">
+    <img src="img/villa-luberon.jpg" alt="Luberon villa with pool and vineyard views" style="height:300px;">
+    <div class="badge-overlay">Superhost</div>
+    <div class="caption"><h4>Search: Bonnieux / Luberon with Pool</h4><p>3 bedrooms &middot; Heated pool &middot; Vineyard setting &middot; ~CHF 4,000&ndash;5,500 for 8 nights</p></div>
+  </div>
+  <p style="margin-top:1.25rem;font-size:0.88rem;">
+    <a href="https://www.airbnb.com/rooms/1103534432510088882" target="_blank">Option 1: Luxury Villa Luberon &rarr;</a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <a href="https://www.airbnb.com/rooms/50842378" target="_blank">Option 2: Provence Villa Maubec &rarr;</a>
+  </p>
+</div>
+
+<!-- SLIDE 3: Activities -->
+<div class="slide">
+  <span class="tag"><span class="tag-dot"></span> Activities</span>
+  <h1>Horseback, Wine &amp; Spa</h1>
+  <h3>Everything within 90 minutes of the villa</h3>
+  <div class="photo-grid">
+    <div class="photo-card">
+      <img src="img/camargue-horses.jpg" alt="Horseback riding on Camargue beach">
+      <div class="caption"><h4>Camargue Beach Horseback Riding</h4><p>3h ride through marshlands, flamingos, and Mediterranean beaches. No experience needed. <a href="https://www.loucaloun.fr/en/horseback-rides/" target="_blank">Book &rarr;</a></p></div>
+    </div>
+    <div class="photo-card">
+      <img src="img/wine-tour.jpg" alt="Luberon wine tasting">
+      <div class="caption"><h4>Private Luberon Wine Tour</h4><p>Half-day visiting 2&ndash;3 domaines. Rose, white, red tastings plus olive oil. <a href="https://planetprovence.com/wine-tour-in-luberon/" target="_blank">Book &rarr;</a></p></div>
+    </div>
+    <div class="photo-card">
+      <img src="img/coquillade-spa.jpg" alt="Couples spa">
+      <div class="caption"><h4>Couples Spa at Coquillade</h4><p>Private spa suite with jacuzzi, sauna, duo massage &amp; champagne. <a href="https://coquillade.fr/en/spa-wellness.html" target="_blank">Details &rarr;</a></p></div>
+    </div>
+    <div class="photo-card">
+      <img src="img/avignon-palais.jpg" alt="Palais des Papes Avignon">
+      <div class="caption"><h4>Les Baux &amp; Avignon Day Trip</h4><p>Two UNESCO sites. Medieval castle ruins, Carrieres de Lumieres, Palais des Papes.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: Dinner Plan -->
+<div class="slide">
+  <span class="tag"><span class="tag-dot"></span> Dinners</span>
+  <h2>8 Nights, 8 Restaurants</h2>
+  <h3>Two Michelin stars across the week. Every dinner within 45 minutes of the villa.</h3>
+  <table class="dinner-table">
+    <thead><tr><th>Night</th><th>Restaurant</th><th>Rating</th><th>Michelin</th><th>Drive</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Thu 14</strong></td><td>La Trinquette, Gordes</td><td><strong>TA 4.5</strong> (#4)</td><td></td><td>20 min</td></tr>
+      <tr><td><strong>Fri 15</strong></td><td><a href="https://ju-maisondecuisine.com/EN/" target="_blank">JU, Maison de Cuisine</a></td><td><strong>G&amp;M 15/20</strong></td><td><span class="badge">1 Star</span></td><td>5 min</td></tr>
+      <tr><td><strong>Sat 16</strong></td><td>Cafe Gaby, Lourmarin</td><td><strong>Google 4.4</strong></td><td></td><td>10 min</td></tr>
+      <tr><td><strong>Sun 17</strong></td><td>Le Numero 9, Lourmarin</td><td><strong>TA 4.5</strong> (#1)</td><td></td><td>10 min</td></tr>
+      <tr><td><strong>Mon 18</strong></td><td>L'Estellan, Gordes</td><td><strong>TheFork 9.4</strong></td><td></td><td>20 min</td></tr>
+      <tr><td><strong>Tue 19</strong></td><td><a href="https://restaurantguru.com/Restaurant-Christian-Etienne-Avignon" target="_blank">Restaurant Sevin, Avignon</a></td><td><strong>RG 4.5</strong></td><td><span class="badge">1 Star</span></td><td>45 min</td></tr>
+      <tr><td><strong>Wed 20</strong></td><td><a href="https://en.labastidedemarie.com/food-and-wines/dinner" target="_blank">La Bastide de Marie</a></td><td><strong>TA 4.3</strong></td><td><span class="badge badge-rec">Vineyard Estate</span></td><td>10 min</td></tr>
+      <tr><td><strong>Thu 21</strong></td><td>Cook at home</td><td></td><td></td><td>0</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SLIDE 5: Restaurant Photos 1 -->
+<div class="slide">
+  <span class="tag"><span class="tag-dot"></span> Restaurant Highlights</span>
+  <h2>Michelin Stars &amp; Top Rated</h2>
+  <div class="photo-grid">
+    <div class="photo-card">
+      <img src="img/ju-bonnieux.jpg" alt="JU Maison de Cuisine">
+      <div class="badge-overlay">Michelin 1 Star</div>
+      <div class="caption"><h4>JU, Maison de Cuisine &middot; Bonnieux</h4><p>Chef Julien Allano. Carte blanche tasting menu. 13th-century cheese cellar experience.</p></div>
+    </div>
+    <div class="photo-card">
+      <img src="img/sevin-avignon.jpg" alt="Restaurant Sevin">
+      <div class="badge-overlay">Michelin 1 Star</div>
+      <div class="caption"><h4>Restaurant Sevin &middot; Avignon</h4><p>12th-century stone building next to Palais des Papes. Innovative Provencal tasting menus.</p></div>
+    </div>
+    <div class="photo-card">
+      <img src="img/numero9.jpg" alt="Le Numero 9">
+      <div class="badge-overlay">TA #1</div>
+      <div class="caption"><h4>Le Numero 9 &middot; Lourmarin</h4><p>Elegant, few tables, beautiful presentation. Top-ranked restaurant in Lourmarin.</p></div>
+    </div>
+    <div class="photo-card">
+      <img src="img/bastide-marie.jpg" alt="La Bastide de Marie">
+      <div class="badge-overlay">Sunset Views</div>
+      <div class="caption"><h4>La Bastide de Marie &middot; Menerbes</h4><p>Luxury vineyard estate. Chef Francois Martin. Famous sunset terrace over the vines.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: Restaurant Photos 2 -->
+<div class="slide">
+  <span class="tag"><span class="tag-dot"></span> Local Favourites</span>
+  <h2>Village Gems &amp; Terrace Dining</h2>
+  <div class="photo-grid">
+    <div class="photo-card">
+      <img src="img/trinquette.jpg" alt="La Trinquette">
+      <div class="badge-overlay">TA 4.5</div>
+      <div class="caption"><h4>La Trinquette &middot; Gordes</h4><p>Intimate stone-walled bistro. Modern French from local ingredients. Charming terrace.</p></div>
+    </div>
+    <div class="photo-card">
+      <img src="img/cafe-gaby.jpg" alt="Cafe Gaby">
+      <div class="badge-overlay">Google 4.4</div>
+      <div class="caption"><h4>Cafe Gaby &middot; Lourmarin</h4><p>Village institution. Loved by Albert Camus and Peter Mayle. Terrace under plane trees.</p></div>
+    </div>
+    <div class="photo-card">
+      <img src="img/estellan.jpg" alt="L'Estellan">
+      <div class="badge-overlay">TheFork 9.4</div>
+      <div class="caption"><h4>L'Estellan &middot; Gordes</h4><p>Luberon valley terrace views. Creative small plates, local wines, relaxed ambiance.</p></div>
+    </div>
+    <div class="photo-card">
+      <img src="img/cooking-provence.jpg" alt="Cook at home">
+      <div class="badge-overlay">Last Night</div>
+      <div class="caption"><h4>Cook at Home</h4><p>Market provisions, local cheeses, herbs, and a bottle of Luberon rose on the villa terrace.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: Day by Day -->
+<div class="slide">
+  <span class="tag"><span class="tag-dot"></span> Itinerary</span>
+  <h2>Day by Day</h2>
+  <div class="day-grid" style="margin-top:1rem;">
+    <div class="day-card"><div class="day-label">Day 1 &middot; Thu May 14</div><h3>Arrive &amp; Settle In</h3><p>Fly Zurich &rarr; Marseille (1h25). Drive 1h to Bonnieux. Pool.</p><p style="margin-top:0.3rem;font-size:0.8rem;"><strong>Dinner:</strong> La Trinquette, Gordes</p></div>
+    <div class="day-card"><div class="day-label">Day 2 &middot; Fri May 15</div><h3>Camargue Horseback</h3><p>3h beach ride through marshlands and Mediterranean coast. Pool afternoon.</p><p style="margin-top:0.3rem;font-size:0.8rem;"><strong>Dinner:</strong> JU Bonnieux (Michelin)</p></div>
+    <div class="day-card"><div class="day-label">Day 3 &middot; Sat May 16</div><h3>Village Exploration</h3><p>Lourmarin chateau &amp; boutiques. Menerbes walk. Maison de la Truffe et du Vin.</p><p style="margin-top:0.3rem;font-size:0.8rem;"><strong>Dinner:</strong> Cafe Gaby, Lourmarin</p></div>
+  </div>
+  <div class="day-grid" style="margin-top:1rem;">
+    <div class="day-card"><div class="day-label">Day 4 &middot; Sun May 17</div><h3>Private Wine Tour</h3><p>2&ndash;3 Luberon domaines with private guide. Rose, white, red + olive oil.</p><p style="margin-top:0.3rem;font-size:0.8rem;"><strong>Dinner:</strong> Le Numero 9, Lourmarin</p></div>
+    <div class="day-card"><div class="day-label">Day 5 &middot; Mon May 18</div><h3>Gordes &amp; Roussillon</h3><p>Senanque Abbey, Gordes village, Roussillon ochre trail hike. Pool.</p><p style="margin-top:0.3rem;font-size:0.8rem;"><strong>Dinner:</strong> L'Estellan, Gordes</p></div>
+    <div class="day-card"><div class="day-label">Day 6 &middot; Tue May 19</div><h3>UNESCO Day Trip</h3><p>Les Baux castle &amp; Carrieres de Lumieres. Avignon: Palais des Papes.</p><p style="margin-top:0.3rem;font-size:0.8rem;"><strong>Dinner:</strong> Restaurant Sevin (Michelin)</p></div>
+  </div>
+  <div class="day-grid two" style="margin-top:1rem; max-width:630px;">
+    <div class="day-card"><div class="day-label">Day 7 &middot; Wed May 20</div><h3>Spa Day &amp; Sunset</h3><p>Pool morning. Couples spa at Coquillade. Vineyard sunset dinner.</p><p style="margin-top:0.3rem;font-size:0.8rem;"><strong>Dinner:</strong> La Bastide de Marie</p></div>
+    <div class="day-card"><div class="day-label">Day 8 &middot; Thu May 21</div><h3>Last Day</h3><p>Market shopping at L'Isle-sur-la-Sorgue or Gordes. Final pool. Villa cook.</p><p style="margin-top:0.3rem;font-size:0.8rem;"><strong>Dinner:</strong> Cook at home</p></div>
+  </div>
+</div>
+
+<!-- SLIDE 8: Quick Links -->
+<div class="slide">
+  <span class="tag"><span class="tag-dot"></span> Quick Links</span>
+  <h2>Everything in One Place</h2>
+  <div class="day-grid" style="margin-top:1.5rem;">
+    <div class="link-card"><div class="link-label">Stay</div><h3>Luberon Design Villa</h3><p>Heated pool &middot; Vineyard views &middot; Near Bonnieux</p><a href="https://www.airbnb.com/luberon-france/stays/villas" target="_blank">Search on Airbnb &rarr;</a></div>
+    <div class="link-card"><div class="link-label">Horseback</div><h3>Mas Lou Caloun</h3><p>Camargue beach rides</p><a href="https://www.loucaloun.fr/en/horseback-rides/" target="_blank">Book rides &rarr;</a></div>
+    <div class="link-card"><div class="link-label">Wine Tour</div><h3>Planet Provence</h3><p>Private Luberon domaine tours</p><a href="https://planetprovence.com/wine-tour-in-luberon/" target="_blank">Book tour &rarr;</a></div>
+  </div>
+  <div class="day-grid" style="margin-top:1rem;">
+    <div class="link-card"><div class="link-label">Michelin Dinner</div><h3>JU, Maison de Cuisine</h3><p>1 Star &middot; Bonnieux</p><a href="https://ju-maisondecuisine.com/EN/" target="_blank">ju-maisondecuisine.com &rarr;</a></div>
+    <div class="link-card"><div class="link-label">Michelin Dinner</div><h3>Restaurant Sevin</h3><p>1 Star &middot; Avignon</p><a href="https://restaurantguru.com/Restaurant-Christian-Etienne-Avignon" target="_blank">View details &rarr;</a></div>
+    <div class="link-card"><div class="link-label">Spa</div><h3>Coquillade Provence</h3><p>Couples spa suite &middot; 15 min drive</p><a href="https://coquillade.fr/en/spa-wellness.html" target="_blank">coquillade.fr &rarr;</a></div>
+  </div>
+</div>
+
+</div>
+
+<div class="nav">
+  <button id="prevBtn" onclick="go(-1)">&#8592;</button>
+  <span class="counter" id="counter"></span>
+  <button id="nextBtn" onclick="go(1)">&#8594;</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let idx = 0;
+function show(n) {
+  if (n < 0 || n >= total) return;
+  slides[idx].classList.remove('active');
+  idx = n;
+  slides[idx].classList.add('active');
+  document.getElementById('counter').textContent = `${idx + 1} / ${total}`;
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = idx === total - 1;
+  document.getElementById('progress').style.width = `${((idx + 1) / total) * 100}%`;
+  const url = new URL(window.location);
+  url.searchParams.set('slide', idx + 1);
+  history.replaceState(null, '', url);
+}
+function go(dir) { show(idx + dir); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+  else if (e.key === 'ArrowLeft') go(-1);
+  else if (e.key === 'Home') show(0);
+  else if (e.key === 'End') show(total - 1);
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) go(diff > 0 ? 1 : -1);
+});
+const startSlide = parseInt(new URLSearchParams(window.location.search).get('slide')) || 1;
+show(Math.max(0, Math.min(total - 1, startSlide - 1)));
+</script>
+</body>
+</html>
